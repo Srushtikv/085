@@ -45,7 +45,10 @@ print(f"Players: {players}")
 5)print(performance.isnull().sum())
 6)print(performance.loc["Player 4"])
 7)print(performance["Match 2"])
-8)print(performance.iloc[:3, :2])
-9)print(performance.loc["Player 5", "Match 3"])
+8)print(performance.loc[["Player 1", "Player 3"], ["Match 1", "Match 4"]])
+9)print(performance.iloc[:3, :2])
+10)print(performance.loc["Player 5", "Match 3"])
 print(performance.iloc[4, 2])
-10)
+11)performance.loc["Player 2", "Match 4"] = 50
+12)performance.loc["Player 6"] = [50, 40, 60, 70]
+
