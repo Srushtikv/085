@@ -1,0 +1,51 @@
+A cricket team tracks the performance of its players in multiple matches. The data is stored in a Pandas DataFrame where rows represent players and columns represent matches:
+import pandas as pd
+# Runs scored by players in different matches
+data = {
+    "Match 1": [45, 60, 20, 80, 55],
+    "Match 2": [30, 50, 40, 90, 65],
+    "Match 3": [70, 20, 35, 60, 40],
+    "Match 4": [25, 45, 15, 100, 75],
+}
+players = ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
+performance = pd.DataFrame(data, index=players)
+1  Display the first three rows of the performance DataFrame.
+2 Get the number of players and matches recorded in the DataFrame
+3 List the match names and player names.
+4 Display the data type of the elements in the DataFrame.
+5 Check if there are any missing values in the DataFrame.
+6 Retrieve the scores of "Player 4" across all matches.
+7 Extract the scores of all players in "Match 2".
+8  Retrieve the scores of "Player 1" and "Player 3" for "Match 1" and "Match 4".  
+9 Slice the DataFrame to get the first 3 players and the first 2 matches.
+10  Find the score of "Player 5" in "Match 3" using .loc or .iloc.
+Update the score of "Player 2" in "Match 4" to 50.
+·  Add a new player, "Player 6", with scores [50, 40, 60, 70] in all matches.
+·  Add 10 bonus runs to all scores in the DataFrame.
+·  Deduct 5 runs from the scores of "Player 3" in all matches.
+·  Calculate the percentage contribution of each player’s score in a match, assuming the maximum possible score in each match is 120 runs.
+·   Calculate the total runs scored by each player across all matches.
+·   Determine the total runs scored in each match.
+·    Find the player with the highest total runs.
+·   Identify the match with the lowest total runs.
+·   Compute the average runs scored by each player across all matches.
+·  Add a new column called "Total Runs" that displays the total runs scored by each player.
+·  Sort the DataFrame by the "Total Runs" column in descending order.
+Filter the players who scored a total of more than 200 runs.
+
+Code
+1)print(performance.head(3))
+2)num_players, num_matches = performance.shape
+print(f"Number of players: {num_players}, Number of matches: {num_matches}")
+3)matches = performance.columns.tolist()
+players = performance.index.tolist()
+print(f"Matches: {matches}")
+print(f"Players: {players}")
+4)print(performance.dtypes)
+5)print(performance.isnull().sum())
+6)print(performance.loc["Player 4"])
+7)print(performance["Match 2"])
+8)print(performance.iloc[:3, :2])
+9)print(performance.loc["Player 5", "Match 3"])
+print(performance.iloc[4, 2])
+10)
