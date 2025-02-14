@@ -265,3 +265,242 @@ maths_score	reading_score	writing_score	placement_score	club_join_year	placement
 26	70	80	67.000000	66	2020	1
 27	78	63	80.000000	74	2020	1
 28	69	72	62.000000	62	2021	1
+
+
+Box Plot
+import pandas as pd
+import numpy as np
+df=pd.read_csv('student.csv')
+df
+maths_score	reading_score	writing_score	placement_score	club_join_year	placement_offer_count
+0	78	63	67	68	2021	1
+1	67	16	73	63	2019	1
+2	62	78	60	63	2021	1
+3	73	69	69	66	2021	1
+4	67	78	77	71	2020	1
+5	68	70	64	69	2018	1
+6	79	64	72	73	2020	1
+7	78	70	78	64	2021	1
+8	160	67	75	62	2020	1
+9	72	80	79	62	2020	1
+10	68	70	68	61	2019	1
+11	65	79	69	75	2019	2
+12	62	74	80	75	2018	2
+13	66	63	12	74	2020	1
+14	76	60	60	64	2018	1
+15	70	61	61	63	2021	1
+16	72	69	65	74	2020	1
+17	80	76	74	78	2020	2
+18	65	70	63	76	2019	2
+19	71	65	68	180	2019	3
+20	68	65	68	75	2019	2
+21	77	79	66	62	2020	1
+22	68	76	80	74	2020	1
+23	80	71	79	78	2020	2
+24	62	71	62	60	2018	1
+25	62	78	66	78	2018	2
+26	66	77	68	69	2020	1
+27	60	75	77	65	2021	1
+col = ['maths_score', 'reading_score' , 'writing_score','placement_score']
+df.boxplot(col)
+col = ['reading_score']
+df.boxplot(col)
+
+Scatter Plot
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+df=pd.read_csv('student.csv')
+df
+maths_score	reading_score	writing_score	placement_score	club_join_year	placement_offer_count
+0	78	63	67	68	2021	1
+1	67	16	73	63	2019	1
+2	62	78	60	63	2021	1
+3	73	69	69	66	2021	1
+4	67	78	77	71	2020	1
+5	68	70	64	69	2018	1
+6	79	64	72	73	2020	1
+7	78	70	78	64	2021	1
+8	160	67	75	62	2020	1
+9	72	80	79	62	2020	1
+10	68	70	68	61	2019	1
+11	65	79	69	75	2019	2
+12	62	74	80	75	2018	2
+13	66	63	12	74	2020	1
+14	76	60	60	64	2018	1
+15	70	61	61	63	2021	1
+16	72	69	65	74	2020	1
+17	80	76	74	78	2020	2
+18	65	70	63	76	2019	2
+19	71	65	68	180	2019	3
+20	68	65	68	75	2019	2
+21	77	79	66	62	2020	1
+22	68	76	80	74	2020	1
+23	80	71	79	78	2020	2
+24	62	71	62	60	2018	1
+25	62	78	66	78	2018	2
+26	66	77	68	69	2020	1
+27	60	75	77	65	2021	1
+fig, ax = plt.subplots(figsize = (18,10))
+ax.scatter(df['placement_score'], df['placement_offer_count'])
+plt.show()
+print(np.where((df['placement_score']<50) & (df['placement_offer_count']>1)))
+print(np.where((df['placement_score']>85) & (df['placement_offer_count']<3)))
+(array([], dtype=int64),)
+(array([], dtype=int64),)
+
+Z-score
+import numpy as np
+from scipy import stats
+z = np.abs(stats.zscore(df['maths_score']))
+print(z)
+0     0.285357
+1     0.333586
+2     0.614924
+3     0.004019
+4     0.333586
+5     0.277319
+6     0.341625
+7     0.285357
+8     4.899298
+9     0.052248
+10    0.277319
+11    0.446121
+12    0.614924
+13    0.389854
+14    0.172822
+15    0.164784
+16    0.052248
+17    0.397892
+18    0.446121
+19    0.108516
+20    0.277319
+21    0.229089
+22    0.277319
+23    0.397892
+24    0.614924
+25    0.614924
+26    0.389854
+27    0.727459
+Name: maths_score, dtype: float64
+threshold = 0.18
+sample_outliers = np.where(z <threshold)
+sample_outliers
+(array([ 3,  9, 14, 15, 16, 19], dtype=int64),)
+
+IQR
+import numpy as np
+sorted_rscore= sorted(df['reading_score'])
+sorted_rscore
+16,
+ 60,
+ 61,
+ 63,
+ 63,
+ 64,
+ 65,
+ 65,
+ 67,
+ 69,
+ 69,
+ 70,
+ 70,
+ 70,
+ 70,
+ 71,
+ 71,
+ 74,
+ 75,
+ 76,
+ 76,
+ 77,
+ 78,
+ 78,
+ 78,
+ 79,
+ 79,
+ 80]
+q1 = np.percentile(sorted_rscore, 25)
+q3 = np.percentile(sorted_rscore, 75)
+print(q1,q3)
+65.0 76.25
+IQR = q3-q1
+lwr_bound = q1-(1.5*IQR)
+upr_bound = q3+(1.5*IQR)
+print(lwr_bound, upr_bound)
+48.125 93.125
+r_outliers = []
+for i in sorted_rscore:
+  if (i<lwr_bound or i>upr_bound):
+   r_outliers.append(i)
+print(r_outliers)
+[16]
+
+Handling Outliers
+new_df=df
+for i in sample_outliers:
+  new_df.drop(i,inplace=True)
+new_df
+maths_score	reading_score	writing_score	placement_score	club_join_year	placement_offer_count
+0	78	63	67	68	2021	1
+1	67	16	73	63	2019	1
+2	62	78	60	63	2021	1
+4	67	78	77	71	2020	1
+5	68	70	64	69	2018	1
+6	79	64	72	73	2020	1
+7	78	70	78	64	2021	1
+8	160	67	75	62	2020	1
+10	68	70	68	61	2019	1
+11	65	79	69	75	2019	2
+12	62	74	80	75	2018	2
+13	66	63	12	74	2020	1
+17	80	76	74	78	2020	2
+18	65	70	63	76	2019	2
+20	68	65	68	75	2019	2
+21	77	79	66	62	2020	1
+22	68	76	80	74	2020	1
+23	80	71	79	78	2020	2
+24	62	71	62	60	2018	1
+25	62	78	66	78	2018	2
+26	66	77	68	69	2020	1
+27	60	75	77	65	2021	1
+
+Quantile based flooring and capping:
+df_stud=df
+ninetieth_percentile = np.percentile(df_stud['maths_score'], 90)
+b = np.where(df_stud['maths_score']>ninetieth_percentile,
+ninetieth_percentile, df_stud['maths_score'])
+print("New array:",b)
+New array: [78.  67.  62.  67.  68.  79.  78.  79.9 68.  65.  62.  66.  79.9 65.
+ 68.  77.  68.  79.9 62.  62.  66.  60. ]
+df_stud.insert(1,"m score",b,True)
+df_stud
+maths_score	m score	m score	reading_score	writing_score	placement_score	club_join_year	placement_offer_count
+0	78	78.0	78.0	63	67	68	2021	1
+1	67	67.0	67.0	16	73	63	2019	1
+2	62	62.0	62.0	78	60	63	2021	1
+4	67	67.0	67.0	78	77	71	2020	1
+5	68	68.0	68.0	70	64	69	2018	1
+6	79	79.0	79.0	64	72	73	2020	1
+7	78	78.0	78.0	70	78	64	2021	1
+8	160	79.9	79.9	67	75	62	2020	1
+10	68	68.0	68.0	70	68	61	2019	1
+11	65	65.0	65.0	79	69	75	2019	2
+12	62	62.0	62.0	74	80	75	2018	2
+13	66	66.0	66.0	63	12	74	2020	1
+17	80	79.9	79.9	76	74	78	2020	2
+18	65	65.0	65.0	70	63	76	2019	2
+20	68	68.0	68.0	65	68	75	2019	2
+21	77	77.0	77.0	79	66	62	2020	1
+22	68	68.0	68.0	76	80	74	2020	1
+23	80	79.9	79.9	71	79	78	2020	2
+24	62	62.0	62.0	71	62	60	2018	1
+25	62	62.0	62.0	78	66	78	2018	2
+26	66	66.0	66.0	77	68	69	2020	1
+27	60	60.0	60.0	75	77	65	2021	1
+
+Mean/Median Inputation
+median=np.median(sorted_rscore)
+median
+70.0
