@@ -1,9 +1,11 @@
 pip install numpy pandas scikit-learn
 # Import necessary libraries
 import seaborn as sns
+import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score
+import numpy as np
 
 # Load the Iris dataset from Seaborn
 iris_data = sns.load_dataset('iris')
@@ -29,14 +31,14 @@ y_pred = nb_model.predict(X_test)
 
 # Compute the confusion matrix
 cm = confusion_matrix(y_test, y_pred)
-print("Confusion Matrix:")
-print(cm)
 
-# Extracting the values for TP, FP, TN, FN
-TP = cm[0, 0]  # True Positive
-FP = cm[0, 1]  # False Positive
-TN = cm[1, 1]  # True Negative
-FN = cm[1, 0]  # False Negative
+# Plot the confusion matrix using Seaborn heatmap
+plt.figure(figsize=(6, 5))
+sns.heatmap(cm, annot=True, fmt='g', cmap='Blues', xticklabels=iris_data['species'].unique(), yticklabels=iris_data['species'].unique())
+plt.title('Confusion Matrix')
+plt.xlabel('Predicted Labels')
+plt.ylabel('True Labels')
+plt.show()
 
 # Calculate performance metrics
 accuracy = accuracy_score(y_test, y_pred)
