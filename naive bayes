@@ -1,0 +1,53 @@
+pip install numpy pandas scikit-learn
+# Import necessary libraries
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score
+
+# Load the Iris dataset from Seaborn
+iris_data = sns.load_dataset('iris')
+
+# Display the first few rows of the dataset
+print(iris_data.head())
+
+# Split the dataset into features (X) and target variable (y)
+X = iris_data.drop('species', axis=1)  # Features
+y = iris_data['species']  # Target variable (species)
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Initialize the Naïve Bayes model
+nb_model = GaussianNB()
+
+# Train the model on the training data
+nb_model.fit(X_train, y_train)
+
+# Make predictions on the test data
+y_pred = nb_model.predict(X_test)
+
+# Compute the confusion matrix
+cm = confusion_matrix(y_test, y_pred)
+print("Confusion Matrix:")
+print(cm)
+
+# Extracting the values for TP, FP, TN, FN
+TP = cm[0, 0]  # True Positive
+FP = cm[0, 1]  # False Positive
+TN = cm[1, 1]  # True Negative
+FN = cm[1, 0]  # False Negative
+
+# Calculate performance metrics
+accuracy = accuracy_score(y_test, y_pred)
+error_rate = 1 - accuracy
+precision = precision_score(y_test, y_pred, average='weighted')
+recall = recall_score(y_test, y_pred, average='weighted')
+f1 = f1_score(y_test, y_pred, average='weighted')
+
+# Print the results
+print(f"Accuracy: {accuracy:.4f}")
+print(f"Error Rate: {error_rate:.4f}")
+print(f"Precision: {precision:.4f}")
+print(f"Recall: {recall:.4f}")
+print(f"F1 Score: {f1:.4f}")
